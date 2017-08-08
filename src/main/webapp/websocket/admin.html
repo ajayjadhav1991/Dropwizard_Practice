@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+   <meta charset = "utf-8" />
+   <title>WebSocket Test</title>
+   <h2>WebSocket Test</h2>
+   <div><textarea rows="" cols="" id='inputtext'></textarea></div>
+   <div><input type="checkbox" name="option" value="check" id='checkboxId' onclick="sendData()"></div>
+<div class="modal-footer"><button onclick="sendData()" type="button" class="btn blue submitNotificationButton" data-objectid="">Submit</button></div>
+
+   <script language = "javascript" type = "text/javascript">
+      var wsUri = "ws://localhost:8080/admin";
+      var output;
+      var input;
+      var connection;
+      var websocket = new WebSocket(wsUri);
+		
+       websocket.onopen = function(evt) {
+         onOpen(evt);
+      };
+       
+      function testJS()
+      {
+    	 var websocket = new WebSocket(wsUri);
+      }
+      
+      websocket.onmessage = function(e){
+     	   console.log('Hello');
+     	  output = document.getElementById("output");
+          output.value = e.data;
+     	};
+	
+      function sendData(){
+    	  testWebSocket();
+      };
+      
+      function init() {
+         output = document.getElementById("output");
+        // testWebSocket();
+      };
+	
+      function testWebSocket() {
+    	 // websocket.send(document.getElementById("inputtext").value);
+    	  websocket.send(document.getElementById("checkboxId").checked);
+
+      };
+	
+      function onOpen(evt) {
+      };
+	
+      websocket.onComplete = function(evt) {
+    	  console.log('Completed');
+      }
+      
+      window.addEventListener("load", init, false);
+   
+   </script>
+   
+   <div>
+   <output id="output"></output>
+   <output id="connectionEstablished"></output>
+   </div>
+
+</html>

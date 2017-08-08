@@ -1,0 +1,62 @@
+apply plugin: 'java'
+apply plugin: 'gradle-one-jar'
+apply plugin: 'application'
+
+// Use Java 7 by default
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+// UTF-8 should be standard by now. So use it!
+[compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
+
+// The main class of the application
+mainClassName = 'com.example.helloworld.HelloWorldService'
+
+// Add Gradle OneJar Plugin, see https://github.com/rholder/gradle-one-jar
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+
+	dependencies {
+		classpath 'com.github.rholder:gradle-one-jar:1.0.3'
+	}
+}
+
+// Set our project variables
+project.ext {
+	dropwizardVersion = '1.1.2'
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	compile (
+		'org.eclipse.jetty.websocket:websocket-server:9.4.2.v20170220',
+		'org.atmosphere:atmosphere-runtime:2.4.12',
+		'com.rabbitmq:amqp-client:2.0.0',
+		'io.dropwizard:dropwizard-core:' + dropwizardVersion
+		
+	)
+}
+
+// Configure the oneJar task
+task oneJar(type: OneJar) {
+	mainClass = mainClassName
+}
+
+// Configure the run task to start the Dropwizard service
+run {
+	args 'server', './src/dist/config/helloworld.yml'
+
+}
+
+task wrapper(type: Wrapper) {
+	gradleVersion = '1.4'
+}
+
+artifacts {
+	oneJar
+}

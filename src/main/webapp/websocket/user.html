@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+   <meta charset = "utf-8" />
+   <title>WebSocket Test</title>
+   <h2>WebSocket Test</h2>
+   <div><textarea rows="" cols="" id='inputtext'></textarea></div>
+<div class="modal-footer"><button onclick="sendData()" type="button" class="btn blue submitNotificationButton" data-objectid="">Submit</button></div>
+   <script language = "javascript" type = "text/javascript">
+     // var wsUri = "ws://echo.websocket.org/";
+      var wsUri = "ws://localhost:8080/user";
+      var output;
+      var input;
+      var connection;
+      var websocket1;
+      var websocket = new WebSocket(wsUri);
+		
+      websocket.onopen = function(evt) {
+         onOpen(evt);
+      };
+      
+      websocket.onclose = function(evt) {
+    	    console.log('Disconnected!');
+    	};
+      websocket.onmessage = function(e){
+     	   console.log('Hello');
+     	};
+	
+      function sendData(){
+    	  testWebSocket();
+      };
+      
+      function init() {
+         output = document.getElementById("output");
+        // testWebSocket();
+      };
+	
+      function testWebSocket() {
+    	  websocket.send(document.getElementById("inputtext").value);
+
+      };
+	
+      function onOpen(evt) {
+      };
+	
+      websocket.onComplete = function(evt) {
+    	  console.log('Completed');
+      }
+      
+      window.addEventListener("load", init, false);
+   
+   </script>
+
+   
+   <div>
+   </div>
+
+</html>
