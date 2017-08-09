@@ -10,9 +10,12 @@ import javax.ws.rs.core.MediaType;
 import org.atmosphere.cpr.ApplicationConfig;
 import org.atmosphere.cpr.AtmosphereServlet;
 
+import com.example.module.ConnectionModule;
+import com.hubspot.dropwizard.guice.GuiceBundle;
+
 public class WebsocketConnectionApp extends Application<WebsocketConnectionConfiguration> {
 	
-	/*GuiceBundle<WebsocketConnectionConfiguration> guiceBundle;*/
+	GuiceBundle<WebsocketConnectionConfiguration> guiceBundle;
     public static void main(String[] args) throws Exception {
         new WebsocketConnectionApp().run(args);
 
@@ -21,13 +24,13 @@ public class WebsocketConnectionApp extends Application<WebsocketConnectionConfi
     @Override
     public void initialize(Bootstrap<WebsocketConnectionConfiguration> bootstrap) {
         
-    	/*guiceBundle = GuiceBundle.<WebsocketConnectionConfiguration>newBuilder()
+    	guiceBundle = GuiceBundle.<WebsocketConnectionConfiguration>newBuilder()
         		.addModule(new ConnectionModule())
         	      .enableAutoConfig(getClass().getPackage().getName())
         	      .setConfigClass(WebsocketConnectionConfiguration.class)
         	      .build();
 
-        	    bootstrap.addBundle(guiceBundle);*/
+        	    bootstrap.addBundle(guiceBundle);
     }
 
 	@Override

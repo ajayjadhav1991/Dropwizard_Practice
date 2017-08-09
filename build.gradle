@@ -34,11 +34,11 @@ repositories {
 
 dependencies {
 	compile (
+	'com.hubspot.dropwizard:dropwizard-guice:1.0.6.0',
 		'org.eclipse.jetty.websocket:websocket-server:9.4.2.v20170220',
 		'org.atmosphere:atmosphere-runtime:2.4.12',
 		'com.rabbitmq:amqp-client:2.0.0',
 		'io.dropwizard:dropwizard-core:' + dropwizardVersion
-		
 	)
 }
 
