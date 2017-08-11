@@ -2,8 +2,6 @@ package com.example.broadcaster;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import org.atmosphere.cpr.AtmosphereConfig;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFuture;
@@ -12,8 +10,8 @@ import org.atmosphere.util.SimpleBroadcaster;
 
 import com.example.json.pojo.Message;
 import com.example.service.RabbitMQConnectionService;
-import com.example.service.RabbitMQConnectionServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -33,7 +31,7 @@ public class AdminListenerBroadcaster extends SimpleBroadcaster {
 	private int count = 0;
 	
 	@Inject
-	private RabbitMQConnectionService connectionService = new RabbitMQConnectionServiceImpl();
+	private RabbitMQConnectionService connectionService;
 	
 	private final ObjectMapper mapper = new ObjectMapper();
 	 
@@ -78,19 +76,19 @@ public class AdminListenerBroadcaster extends SimpleBroadcaster {
 							count--;
 						}
 						try {
-							/*Object newMsg = filter(messageNode.getContent());
+							Object newMsg = filter(messageNode.getContent());
 							if (newMsg != null) {
 								deliverPush(new Deliver(newMsg,
 										new BroadcasterFuture<Object>(newMsg),
 										messageNode.getContent()), true);
 							}
-							*/
-							Object newMsg = filter(count);
+							
+							/*Object newMsg = filter(count);
 							if (newMsg != null) {
 								deliverPush(new Deliver(newMsg,
 										new BroadcasterFuture<Object>(newMsg),
 										count), true);
-							}
+							}*/
 						} catch (Throwable t) {
 						}
 					}
@@ -103,6 +101,6 @@ public class AdminListenerBroadcaster extends SimpleBroadcaster {
 	  }
 
 	public AdminListenerBroadcaster() {
-		super();
+		System.out.println("In AdminListenerBroadcaster constructor");
 	}
 }

@@ -2,10 +2,10 @@ package com.example.resources;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
+
+
 
 import org.atmosphere.config.service.WebSocketHandlerService;
-import org.atmosphere.cpr.AtmosphereResourceSessionFactory;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
 import org.atmosphere.cpr.PerRequestBroadcastFilter;
@@ -14,23 +14,22 @@ import org.atmosphere.websocket.WebSocketHandlerAdapter;
 
 import com.example.broadcast.filter.PerRequestBroadcastFilterImpl;
 import com.example.broadcaster.AdminListenerBroadcaster;
+import com.google.inject.Inject;
 
 @WebSocketHandlerService(path = "/admin", broadcaster = AdminListenerBroadcaster.class)
 public class AdminResource extends WebSocketHandlerAdapter {
 
-	
-	AdminListenerBroadcaster broadcastera = new AdminListenerBroadcaster();
+	@Inject
+	AdminListenerBroadcaster broadcastera;
 	
 	@Inject
 	BroadcasterFactory factory;
 	
 	@Inject
-	AtmosphereResourceSessionFactory atmResourceSessionfactory;
+	public AdminResource( BroadcasterFactory factory, AdminListenerBroadcaster broadcastera) {
 
-	
-	public AdminResource() {
-		super();
-		
+		this.factory = factory;
+		this.broadcastera = broadcastera;
 	}
 
 	@Override
@@ -38,7 +37,6 @@ public class AdminResource extends WebSocketHandlerAdapter {
 		Broadcaster broadcastera = factory.lookup("/admin");
 		factory.add(broadcastera, "simple");
 		PerRequestBroadcastFilter broadCastFilter = new PerRequestBroadcastFilterImpl();
-		//Broadcaster broadcaster = factory.lookup("/admin");
 		broadcastera.getBroadcasterConfig().addFilter(broadCastFilter);
 		webSocket.resource().setBroadcaster(factory.lookup("/admin"));
 	}

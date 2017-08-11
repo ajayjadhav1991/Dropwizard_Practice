@@ -2,8 +2,6 @@ package com.example.resources;
 
 import java.io.IOException;
 
-import javax.inject.Inject;
-
 import org.atmosphere.config.service.WebSocketHandlerService;
 import org.atmosphere.cpr.Broadcaster;
 import org.atmosphere.cpr.BroadcasterFactory;
@@ -15,8 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import com.example.json.pojo.Message;
 import com.example.service.RabbitMQConnectionService;
-import com.example.service.RabbitMQConnectionServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Inject;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
 import com.rabbitmq.client.MessageProperties;
@@ -37,15 +35,16 @@ public class UserResource extends WebSocketHandlerAdapter {
 
 	private  Channel channel;
 
-	private RabbitMQConnectionService connectionService = new RabbitMQConnectionServiceImpl();
+	@Inject
+	private RabbitMQConnectionService connectionService;
 	
 	@Inject
 	 BroadcasterFactory factory;
 	
-	
-	public UserResource() {
-		super();
-		
+	  @Inject
+	public UserResource( RabbitMQConnectionService connectionService) {
+
+		  this.connectionService = connectionService;
 		
 	}
 

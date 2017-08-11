@@ -8,9 +8,10 @@ import javax.servlet.ServletRegistration;
 import javax.ws.rs.core.MediaType;
 
 import org.atmosphere.cpr.ApplicationConfig;
-import org.atmosphere.cpr.AtmosphereServlet;
+import org.atmosphere.guice.AtmosphereGuiceServlet;
 
 import com.example.module.ConnectionModule;
+import com.google.inject.Inject;
 import com.hubspot.dropwizard.guice.GuiceBundle;
 
 public class WebsocketConnectionApp extends Application<WebsocketConnectionConfiguration> {
@@ -20,10 +21,17 @@ public class WebsocketConnectionApp extends Application<WebsocketConnectionConfi
         new WebsocketConnectionApp().run(args);
 
     }
-
+    
+    @Inject
+    AtmosphereGuiceServlet atmosphereguiceServlet;
+    
+    @Inject
+    AtmosphereGuiceServlet atmosphereguiceServlet1;
+    
     @Override
     public void initialize(Bootstrap<WebsocketConnectionConfiguration> bootstrap) {
         
+    	
     	guiceBundle = GuiceBundle.<WebsocketConnectionConfiguration>newBuilder()
         		.addModule(new ConnectionModule())
         	      .enableAutoConfig(getClass().getPackage().getName())
@@ -31,12 +39,14 @@ public class WebsocketConnectionApp extends Application<WebsocketConnectionConfi
         	      .build();
 
         	    bootstrap.addBundle(guiceBundle);
+        	    
+        	    //guiceBundle.getInjector().getInstance("");
     }
 
 	@Override
 	public void run(WebsocketConnectionConfiguration configuration,
 			Environment environment) throws Exception {
-		 AtmosphereServlet atmosphereServlet = new AtmosphereServlet();
+		AtmosphereGuiceServlet atmosphereServlet = new AtmosphereGuiceServlet();
 	        atmosphereServlet.framework().addInitParameter("com.sun.jersey.config.property.packages",
 	                "com.example.resources");
 	        
@@ -52,7 +62,7 @@ public class WebsocketConnectionApp extends Application<WebsocketConnectionConfi
 	        servletHolder.addMapping("/user");
 	        
 	        
-	        AtmosphereServlet atmosphereServlet1 = new AtmosphereServlet();
+	        AtmosphereGuiceServlet atmosphereServlet1 = new AtmosphereGuiceServlet();
 	        atmosphereServlet1.framework().addInitParameter("com.sun.jersey.config.property.packages",
 	                "com.example.resources");
 	        

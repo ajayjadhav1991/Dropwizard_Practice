@@ -1,6 +1,7 @@
 apply plugin: 'java'
 apply plugin: 'gradle-one-jar'
 apply plugin: 'application'
+apply plugin : 'eclipse'
 
 // Use Java 7 by default
 sourceCompatibility = '1.8'
@@ -14,49 +15,62 @@ mainClassName = 'com.example.helloworld.HelloWorldService'
 
 // Add Gradle OneJar Plugin, see https://github.com/rholder/gradle-one-jar
 buildscript {
-	repositories {
-		mavenCentral()
-	}
+ repositories {
+  mavenCentral()
+ }
 
-	dependencies {
-		classpath 'com.github.rholder:gradle-one-jar:1.0.3'
-	}
+ dependencies {
+  classpath 'com.github.rholder:gradle-one-jar:1.0.3'
+ }
 }
 
 // Set our project variables
 project.ext {
-	dropwizardVersion = '1.1.2'
+ dropwizardVersion = '1.1.2'
 }
 
 repositories {
-	mavenCentral()
+ mavenCentral()
 }
 
 dependencies {
-	compile (
-	'com.hubspot.dropwizard:dropwizard-guice:1.0.6.0',
-		'org.eclipse.jetty.websocket:websocket-server:9.4.2.v20170220',
-		'org.atmosphere:atmosphere-runtime:2.4.12',
-		'com.rabbitmq:amqp-client:2.0.0',
-		'io.dropwizard:dropwizard-core:' + dropwizardVersion
-	)
+ compile (
+  'io.dropwizard:dropwizard-core:' + dropwizardVersion,
+  'com.hubspot.dropwizard:dropwizard-guice:1.0.6.0',
+  'org.eclipse.jetty.websocket:websocket-server:9.4.2.v20170220',
+  'com.rabbitmq:amqp-client:2.0.0'
+ )
+ compile ('org.atmosphere:atmosphere-jersey:2.4.14') {
+  exclude group: 'com.sun.jersey', module: 'jersey-client'
+  exclude group: 'com.sun.jersey', module: 'jersey-server'
+  exclude group: 'com.sun.jersey', module: 'jersey-core'
+  exclude group: 'com.sun.jersey', module: 'jersey-servlet'
+  exclude group: 'com.sun.jersey', module: 'jersey-guice'
+ }
+ compile ('org.atmosphere:atmosphere-guice:2.4.4') {
+  exclude group: 'com.sun.jersey', module: 'jersey-client'
+  exclude group: 'com.sun.jersey', module: 'jersey-server'
+  exclude group: 'com.sun.jersey', module: 'jersey-core'
+  exclude group: 'com.sun.jersey', module: 'jersey-servlet'
+  exclude group: 'com.sun.jersey', module: 'jersey-guice'
+ }
 }
 
 // Configure the oneJar task
 task oneJar(type: OneJar) {
-	mainClass = mainClassName
+ mainClass = mainClassName
 }
 
 // Configure the run task to start the Dropwizard service
 run {
-	args 'server', './src/dist/config/helloworld.yml'
+ args 'server', './src/dist/config/helloworld.yml'
 
 }
 
 task wrapper(type: Wrapper) {
-	gradleVersion = '1.4'
+ gradleVersion = '1.4'
 }
 
 artifacts {
-	oneJar
+ oneJar
 }
